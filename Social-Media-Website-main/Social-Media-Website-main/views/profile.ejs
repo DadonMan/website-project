@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include Dropzone CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
+
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/scrollbar.css">
+
+    <style>
+        .card {
+            background-color: #4a5568;
+            /* Card background color */
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #e2e8f0;
+            /* Light text color */
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content {
+            color: #cbd5e0;
+            /* Lighter text color */
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            background-color: #4a5568;
+            /* Darker button color */
+            color: #e2e8f0;
+            /* Light text color */
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #cbd5e0;
+            /* Button color on hover */
+        }
+    </style>
+</head>
+
+
+
+<body class="bg-gray-900 text-white">
+    <!-- designed navbar -->
+    <nav class="bg-gray-800 p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <span class="text-xl font-bold text-white ml-2"><i class="fa-solid fa-hashtag"></i> Similar
+                People</span>
+        </div>
+        <a href="/feed" class="text-white hover:text-indigo-500 transition-all duration-300">Back to Feed <i
+                class="fa-solid fa-arrow-right"></i></a>
+    </nav>
+    <main class="max-w-5xl mx-auto transition-all duration-300">
+        <section class="banner relative mt-8">
+            <div class="banner-content bg-white h-48 relative" style="border-radius: 20px;">
+                <img id="bannerImage" src="" alt="Banner Image" class="w-full h-full object-cover"
+                    style="border-radius: 18px;">
+            </div>
+
+            <div class="flex flex-col items-center mb-4 -mt-10">
+                <!-- Profile Picture with Overlay -->
+                <div class="relative">
+
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/002/534/006/small/social-media-chatting-online-blank-profile-picture-head-and-body-icon-people-standing-icon-grey-background-free-vector.jpg"
+                        alt="Profile Picture" class="w-20 h-20 border-2 border-white rounded-full shadow-lg"
+                        id="profilePicture">
+
+                </div>
+                <h1 class="text-2xl font-bold mt-4">
+                    <%= user.username %>
+                </h1>
+
+                <section class="statistics-section mt-8">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="flex flex-col items-center justify-center p-4 bg-gray-800 rounded-md">
+                            <div class="text-2xl font-bold text-white">
+                                <%= user.post_count || 0 %>
+                            </div>
+                            <div class="text-lg text-gray-400">
+                                Posts
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-4 bg-gray-800 rounded-md">
+                            <div class="text-2xl font-bold text-white">
+                                <%= user.comment_count || 0 %>
+                            </div>
+                            <div class="text-lg text-gray-400">
+                                Comments
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center justify-center p-4 bg-gray-800 rounded-md">
+                            <div class="text-2xl font-bold text-white">
+                                <%= user.follow_count || 0 %>
+                            </div>
+                            <div class="text-lg text-gray-400">
+                                Follows
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <div class="flex flex-row">
+                    <!-- Follow Button -->
+                    <button id="followBtn"
+                        class="mt-4 inline-block px-6 py-3 text-white bg-blue-900 rounded-full hover:bg-blue-800 mr-3">
+                        Follow <i class="fas fa-user-plus"></i>
+                    </button>
+
+                    <a href="/settings"
+                        class=" mt-4 inline-block px-6 py-3 text-white bg-blue-900 rounded-full hover:bg-blue-800">
+                        Edit Profile <i class="fas fa-pencil"></i>
+                    </a>
+                </div>
+
+
+                <div class="relative">
+                    <div id="bioInput"
+                        class="w-64 h-16 bg-gray-800 text-white border border-gray-600 rounded-md mt-6 p-2 focus:outline-none focus:border-blue-400 resize-none"
+                        placeholder="Write your bio here...">
+                        <%= user.bio %>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <section class="activity-tabs mt-8">
+            <h1 class="font-bold text-left text-white text-xl">User Activity</h1>
+            <hr class="bg-gray-600 mb-4 rounded-md mt-3">
+            <div class="user-activity-posts bg-gray-800 p-4 shadow rounded relative" id="recentPostsContainer">
+                <!-- Activity Spinner for Posts -->
+                <div class="spinner">
+                    <div class="w-8 h-8 border-4 border-gray-200 rounded-full animate-spin"></div>
+                </div>
+                <!-- Recent forum posts content will load here -->
+            </div>
+        </section>
+    </main>
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+    <script src="/pfpHandler.js"></script>
+    <script src="/user.js"></script>
+
+    <script src="/profileLoad.js"></script>
+
+</body>
+
+</html>

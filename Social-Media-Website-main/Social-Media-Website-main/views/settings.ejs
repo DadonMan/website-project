@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/scrollbar.css">
+
+</head>
+
+<body class="bg-gray-900 text-white">
+
+    <nav class="bg-gray-800 p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <span class="text-xl font-bold text-white ml-2"><i class="fa-solid fa-hashtag"></i> Similar
+                People</span>
+        </div>
+        <div class="flex items-center">
+            <a href="/<%= username %>" class="text-white hover:text-indigo-500 transition-all duration-300 mr-4">
+                <i class="fas fa-user-circle mr-1"></i> View Profile
+            </a>
+
+            <a href="/feed" class="text-white hover:text-indigo-500 transition-all duration-300">
+                Back to Feed <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </nav>
+    <div class="min-h-screen flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
+
+        <div class="max-w-md w-full space-y-8">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold">User Settings</h2>
+            </div>
+            <form id="settingsForm" class="mt-8 space-y-6" action="/update-user" method="POST">
+                <!-- Username -->
+                <label for="username" class="block text-sm font-medium">Username</label>
+                <div>
+                    <input type="text" id="username" name="username" autocomplete="false" hidden="true"
+                        class="mt-1 p-2 block w-full rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                        placeholder="Enter your username">
+                </div>
+                <!-- Email -->
+                <label for="email" class="block text-sm font-medium">Email</label>
+                <div>
+                    <input type="email" id="email" name="email" autocomplete="false" hidden="true"
+                        class="mt-1 p-2 block w-full rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                        placeholder="Enter your email">
+                </div>
+                <!-- Password -->
+                <label for="password" class="block text-sm font-medium">Password</label>
+                <div>
+                    <input type="password" id="password" name="password" autocomplete="false" hidden="true"
+                        class="mt-1 p-2 block w-full rounded-md bg-gray-800 border border-gray-700 focus:outline-none focus:border-blue-500"
+                        placeholder="Enter your password to confirm changes">
+                </div>
+
+                <!-- Bio -->
+                <div class="w-full max-w-md mx-auto mt-8">
+                    <label for="bio" class="block text-gray-300">Bio (Max 80 characters)</label>
+                    <input id="bio" type="text" maxlength="80"
+                        class="block w-full px-4 py-2 mt-1 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:border-gray-400 text-gray-300 transition duration-300 ease-in-out">
+                    <p class="mt-2 text-xs text-gray-400">Characters remaining: <span id="charCount">80</span></p>
+                    <p class="text-xs text-gray-400" id="bioStatus"></p>
+                </div>
+
+
+
+                <!-- Profile Picture -->
+                <div class="relative">
+                    <label for="profile-picture" class="block text-sm font-medium">Profile Image</label>
+                    <div id="profile-picture-dropzone"
+                        class="w-full h-48 border border-gray-700 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-800 relative">
+                        <div id="profile-picture-content" class="flex flex-col items-center justify-center h-full">
+                            <svg class="w-8 h-8 mb-2 text-gray-400  dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
+                                    upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">(SVG, PNG, JPG, GIF)</p>
+                        </div>
+                        <input id="profile-picture" type="file" accept="image/svg+xml, image/png, image/jpeg, image/gif"
+                            class="absolute top-0 left-0 opacity-0 cursor-pointer" />
+                    </div>
+                </div>
+                <div>
+                    <button id="removeImageBtn"
+                        class=" bg-gray-800 text-gray-100 p-1 rounded-full hidden">Remove</button>
+                </div>
+
+
+                <!-- Banner Image -->
+                <div class="relative">
+                    <label for="banner-image" class="block text-sm font-medium">Banner Image</label>
+                    <div id="banner-image-dropzone"
+                        class="w-full h-48 border border-gray-700 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-800 dark:hover:bg-gray-800 relative">
+                        <div id="banner-image-content" class="flex flex-col items-center justify-center h-full">
+                            <svg class="w-8 h-8 mb-2 text-gray-400  dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
+                                    upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">(SVG, PNG, JPG, GIF)</p>
+                        </div>
+                        <input id="banner-image" type="file" accept="image/svg+xml, image/png, image/jpeg, image/gif"
+                            class="absolute top-0 left-0 opacity-0 cursor-pointer" />
+                    </div>
+
+                </div>
+
+                <div>
+                    <button id="removeImageBtn2"
+                        class=" bg-gray-800 text-gray-100 p-1 rounded-full hidden">Remove</button>
+                </div>
+
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit"
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">Save
+                        Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/settings.js"></script>
+    <script src="/validateForm.js"></script>
+    <script src="/message.js"></script>
+    <script src="/user.js"></script>
+
+
+</body>
+
+</html>
